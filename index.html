@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Halaman Uji Coba Scanner</title>
+    <title>Halaman Uji Coba Scanner (Statis)</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -72,13 +72,12 @@
 <body>
 
     <h1>Halaman Uji Coba untuk Smart Scanner v5.4</h1>
-    <p style="text-align: center;">Tombol "Redeem Now" akan berpindah ke kartu acak setiap 2 detik.</p>
+    <p style="text-align: center;">Posisi tombol "Redeem Now" akan diacak setiap kali halaman di-refresh.</p>
 
     <div class="grid" id="reward-grid">
         </div>
 
     <script>
-        // Gunakan ID yang sama persis dengan yang ada di userscript Anda
         const TARGET_IDS = ['18599', '18597', '18598', '19027', '18603', '18602', '18822', '18823', '19021'];
         const gridContainer = document.getElementById('reward-grid');
 
@@ -86,8 +85,6 @@
         TARGET_IDS.forEach(id => {
             const card = document.createElement('div');
             card.className = 'card';
-            // Skrip Anda mencari elemen 'div' di dalam '.grid', jadi struktur ini sudah cocok.
-            
             card.innerHTML = `
                 <div>
                     <h3>Contoh Reward</h3>
@@ -95,40 +92,26 @@
                 </div>
                 <div class="reward-id">ID: ${id}</div>
             `;
-            // Skrip Anda mencari teks "ID: xxxxxx", format ini sudah cocok.
-            
             gridContainer.appendChild(card);
         });
 
-        // 2. Fungsi untuk memindahkan tombol "Redeem Now"
-        function moveRedeemButton() {
-            // Hapus tombol lama jika ada
-            const existingButton = document.querySelector('button');
-            if (existingButton) {
-                existingButton.remove();
-            }
-
-            // Dapatkan semua kartu yang ada
+        // 2. Fungsi untuk menempatkan tombol "Redeem Now" secara acak
+        function placeRedeemButtonRandomly() {
             const allCards = document.querySelectorAll('.grid > div');
             if (allCards.length === 0) return;
 
-            // Pilih satu kartu secara acak
             const randomIndex = Math.floor(Math.random() * allCards.length);
             const targetCard = allCards[randomIndex];
 
-            // Buat tombol baru
             const redeemButton = document.createElement('button');
             redeemButton.textContent = 'Redeem Now';
-            // Skrip Anda mencari teks "redeem now" (case-insensitive), jadi ini cocok.
-
-            // Tambahkan tombol ke kartu yang dipilih secara acak
+            
             targetCard.appendChild(redeemButton);
         }
 
-        // 3. Panggil fungsi untuk memindahkan tombol setiap 2 detik (2000 ms)
-        // Interval ini cukup untuk melihat visual scan dari skrip Anda bekerja.
-        moveRedeemButton(); // Panggil sekali di awal agar tombol langsung muncul
-        setInterval(moveRedeemButton, 2000);
+        // 3. Panggil fungsi HANYA SATU KALI saat halaman dimuat
+        placeRedeemButtonRandomly();
+        // BARIS setInterval TELAH DIHAPUS
 
     </script>
 
