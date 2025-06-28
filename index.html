@@ -11,7 +11,6 @@
             font-family: 'Inter', sans-serif;
         }
         .card {
-            /* Menjaga rasio kotak agar tetap 1:1 */
             aspect-ratio: 1 / 1;
             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
         }
@@ -19,9 +18,14 @@
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
-        /* Style untuk pesan notifikasi */
         #notification {
             transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
+        /* Style agar link terlihat sama persis dengan button */
+        .button-like-link {
+            display: inline-block;
+            text-align: center;
+            width: 100%;
         }
     </style>
 </head>
@@ -32,19 +36,16 @@
         <p id="statusMessage" class="text-lg text-gray-400 transition-colors duration-300">Hanya satu kotak yang berisi hadiah. Semoga beruntung!</p>
     </div>
 
-    <!-- Kontainer untuk semua kotak hadiah -->
     <div id="game-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 w-full max-w-4xl">
         <!-- Kotak hadiah akan dibuat oleh JavaScript -->
     </div>
 
-    <!-- Tombol untuk memulai ulang permainan secara manual -->
     <button id="resetButton" class="mt-8 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transform hover:scale-105 transition-transform">
         Mulai Ulang
     </button>
     
-    <!-- Notifikasi Global -->
-    <div id="notification" class="hidden fixed top-5 right-5 bg-green-500 text-white py-3 px-5 rounded-lg shadow-xl opacity-0 transform -translate-y-10">
-        <!-- Konten notifikasi diisi oleh JavaScript -->
+    <div id="notification" class="hidden fixed top-5 right-5 bg-yellow-500 text-white py-3 px-5 rounded-lg shadow-xl opacity-0 transform -translate-y-10">
+        Kotak ini kosong. Coba lagi!
     </div>
 
 
@@ -56,30 +57,27 @@
         const resetButton = document.getElementById('resetButton');
 
         // --- Konfigurasi Game ---
-        const TOTAL_BOXES = 12; // Jumlah total kotak hadiah
-        const VALID_BUTTON_ID = 'valid-redeem-button'; // ID unik untuk tombol yang benar
-
+        const TOTAL_BOXES = 12;
+        // --- PERUBAHAN DI SINI: Daftar URL yang valid ---
+        const rewardUrls = [
+            'https://loyalty.aldmic.com/reward/18599',
+            'https://loyalty.aldmic.com/reward/18597',
+            'https://loyalty.aldmic.com/reward/18598',
+            'https://loyalty.aldmic.com/reward/19027'
+        ];
+        
         /**
-         * Fungsi untuk menampilkan notifikasi.
-         * @param {string} message - Pesan yang akan ditampilkan.
-         * @param {string} type - 'success' atau 'error'.
+         * Fungsi untuk menampilkan notifikasi "kotak kosong".
          */
-        function showNotification(message, type = 'success') {
-            notification.textContent = message;
-            if (type === 'success') {
-                notification.className = 'fixed top-5 right-5 bg-green-500 text-white py-3 px-5 rounded-lg shadow-xl opacity-0 transform -translate-y-10';
-            } else {
-                notification.className = 'fixed top-5 right-5 bg-yellow-500 text-white py-3 px-5 rounded-lg shadow-xl opacity-0 transform -translate-y-10';
-            }
-            
+        function showEmptyNotification() {
             notification.classList.remove('hidden');
-            notification.offsetWidth;
+            notification.offsetWidth; // Memicu reflow
             notification.classList.remove('opacity-0', '-translate-y-10');
 
             setTimeout(() => {
                 notification.classList.add('opacity-0', '-translate-y-10');
                 setTimeout(() => notification.classList.add('hidden'), 500);
-            }, 3000);
+            }, 2000);
         }
 
         /**
@@ -88,8 +86,9 @@
         function setupGame() {
             gameGrid.innerHTML = '';
             statusMessage.textContent = 'Hanya satu kotak yang berisi hadiah. Semoga beruntung!';
-            statusMessage.classList.remove('text-green-400', 'text-yellow-400');
 
+            // --- PERUBAHAN DI SINI: Pilih URL dan kotak pemenang secara acak ---
+            const randomRewardUrl = rewardUrls[Math.floor(Math.random() * rewardUrls.length)];
             const winnerIndex = Math.floor(Math.random() * TOTAL_BOXES);
 
             for (let i = 0; i < TOTAL_BOXES; i++) {
@@ -99,45 +98,46 @@
                 const giftIcon = `<svg class="w-12 h-12 mb-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V6a2 2 0 10-2 2h2zm0 13l-4-4h8l-4 4z"></path></svg>`;
                 card.innerHTML = giftIcon;
 
-                const button = document.createElement('button');
-                // --- PERUBAHAN DI SINI ---
-                button.textContent = 'REDEEM NOW'; // Teks tombol diubah
-                button.className = 'w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-colors';
-                
-                if (i === winnerIndex) {
-                    button.id = VALID_BUTTON_ID;
-                } else {
-                    button.id = `fake-button-${i}-${Math.random()}`;
-                }
+                const buttonClasses = 'w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-colors';
 
-                card.appendChild(button);
+                // --- PERUBAHAN DI SINI: Buat <a> untuk pemenang, <button> untuk yang lain ---
+                if (i === winnerIndex) {
+                    // Ini adalah tombol/link yang valid
+                    const link = document.createElement('a');
+                    link.href = randomRewardUrl;
+                    link.target = '_blank'; // Buka di tab baru
+                    link.rel = 'noopener noreferrer';
+                    link.className = `${buttonClasses} button-like-link`;
+                    link.textContent = 'REDEEM NOW';
+                    card.appendChild(link);
+                } else {
+                    // Ini adalah tombol palsu
+                    const button = document.createElement('button');
+                    button.textContent = 'REDEEM NOW';
+                    button.className = buttonClasses;
+                    card.appendChild(button);
+                }
+                
                 gameGrid.appendChild(card);
             }
         }
 
         // --- Event Listener Menggunakan Delegasi ---
         gameGrid.addEventListener('click', function(event) {
-            const clickedButton = event.target.closest('button');
-            if (!clickedButton || clickedButton.disabled) {
-                return;
-            }
+            const clickedElement = event.target.closest('button');
 
-            if (clickedButton.id === VALID_BUTTON_ID) {
-                statusMessage.textContent = 'Selamat! Anda menemukan hadiahnya!';
-                statusMessage.classList.add('text-green-400');
-                showNotification('Anda berhasil!', 'success');
+            // Hanya proses jika yang diklik adalah BUTTON (tombol palsu) dan belum di-disable
+            if (clickedElement && !clickedElement.disabled) {
+                showEmptyNotification();
                 
-                setTimeout(setupGame, 2000);
-
-            } else {
-                statusMessage.textContent = 'Kotak ini kosong. Coba lagi!';
-                statusMessage.classList.add('text-yellow-400');
-                
-                clickedButton.disabled = true;
-                clickedButton.textContent = 'Kosong';
-                clickedButton.classList.remove('bg-red-600', 'hover:bg-red-700');
-                clickedButton.classList.add('bg-gray-600', 'cursor-not-allowed');
+                // Nonaktifkan tombol yang salah
+                clickedElement.disabled = true;
+                clickedElement.textContent = 'Kosong';
+                clickedElement.classList.remove('bg-red-600', 'hover:bg-red-700');
+                clickedElement.classList.add('bg-gray-600', 'cursor-not-allowed');
             }
+            // Jika yang diklik adalah link <a>, browser akan menanganinya secara otomatis.
+            // Tidak perlu ada logika tambahan di sini untuk kasus yang benar.
         });
         
         resetButton.addEventListener('click', setupGame);
