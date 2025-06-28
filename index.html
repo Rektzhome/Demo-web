@@ -3,197 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Halaman Uji Coba (Pro & Mobile)</title>
+    <title>Permainan Kotak Hadiah</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Menggunakan CSS Variables untuk tema yang konsisten */
-        :root {
-            --primary-color: #007bff;
-            --secondary-color: #6c757d;
-            --background-color: #f8f9fa;
-            --card-background: #ffffff;
-            --text-color: #212529;
-            --light-text-color: #6c757d;
-            --border-color: #dee2e6;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --border-radius: 12px;
-        }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--background-color);
-            padding: 16px;
-            color: var(--text-color);
-            margin: 0;
+            font-family: 'Inter', sans-serif;
         }
-        .header {
-            text-align: center;
-            margin-bottom: 24px;
-        }
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 4px;
-        }
-        .header p {
-            color: var(--light-text-color);
-            font-size: 16px;
-        }
-
-        /* 1. LAYOUT RESPONSIF (RAMAH MOBILE) */
-        .grid {
-            display: grid;
-            /* Layout ini akan secara otomatis mengubah jumlah kolom.
-              - Di layar HP: 1 kolom
-              - Di layar Tablet: 2-3 kolom
-              - Di layar Desktop: 4-5 kolom
-            */
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        /* 2. DESAIN KARTU PROFESIONAL */
         .card {
-            background-color: var(--card-background);
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            overflow: hidden; /* Penting agar border-radius bekerja dengan baik */
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            /* Menjaga rasio kotak agar tetap 1:1 */
+            aspect-ratio: 1 / 1;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
         }
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
-
-        .card-image-placeholder {
-            background-color: #e9ecef;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 140px;
-        }
-        /* Ikon Hadiah (SVG) */
-        .card-image-placeholder svg {
-            width: 50px;
-            height: 50px;
-            color: var(--secondary-color);
-        }
-
-        .card-content {
-            padding: 20px;
-            flex-grow: 1; /* Membuat konten mengisi ruang yang tersedia */
-        }
-        .card-content h3 {
-            margin-top: 0;
-            margin-bottom: 8px;
-            font-size: 1.2rem;
-        }
-        .card-content p {
-            margin: 0;
-            color: var(--light-text-color);
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-
-        .card-footer {
-            padding: 0 20px 20px;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .reward-id {
-            font-family: 'Courier New', Courier, monospace;
-            background-color: #f1f3f5;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            color: var(--text-color);
-            margin-bottom: 16px;
-            text-align: center;
-        }
-
-        button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 14px 20px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        button:active {
-            transform: scale(0.98);
+        /* Style untuk pesan notifikasi */
+        #notification {
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
         }
     </style>
 </head>
-<body>
+<body class="bg-gray-900 text-white flex flex-col items-center justify-center min-h-screen p-4 sm:p-6">
 
-    <div class="header">
-        <h1>Uji Coba Scanner</h1>
-        <p>Desain profesional & ramah mobile.</p>
+    <div class="text-center mb-8">
+        <h1 class="text-4xl md:text-5xl font-bold mb-2">Pilih Kotak Hadiah</h1>
+        <p id="statusMessage" class="text-lg text-gray-400 transition-colors duration-300">Hanya satu kotak yang berisi hadiah. Semoga beruntung!</p>
     </div>
 
-    <div class="grid" id="reward-grid">
-        </div>
+    <!-- Kontainer untuk semua kotak hadiah -->
+    <div id="game-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 w-full max-w-4xl">
+        <!-- Kotak hadiah akan dibuat oleh JavaScript -->
+    </div>
+
+    <!-- Tombol untuk memulai ulang permainan secara manual -->
+    <button id="resetButton" class="mt-8 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transform hover:scale-105 transition-transform">
+        Mulai Ulang
+    </button>
+    
+    <!-- Notifikasi Global -->
+    <div id="notification" class="hidden fixed top-5 right-5 bg-green-500 text-white py-3 px-5 rounded-lg shadow-xl opacity-0 transform -translate-y-10">
+        <!-- Konten notifikasi diisi oleh JavaScript -->
+    </div>
+
 
     <script>
-        const TARGET_IDS = ['18599', '18597', '18598', '19027', '18603', '18602', '18822', '18823', '19021'];
-        const gridContainer = document.getElementById('reward-grid');
+        // --- Referensi Elemen DOM ---
+        const gameGrid = document.getElementById('game-grid');
+        const statusMessage = document.getElementById('statusMessage');
+        const notification = document.getElementById('notification');
+        const resetButton = document.getElementById('resetButton');
 
-        // Ikon Hadiah SVG untuk ditempatkan di setiap kartu
-        const giftIconSVG = `
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="20 12 20 22 4 22 4 12"></polyline>
-                <rect x="2" y="7" width="20" height="5"></rect>
-                <line x1="12" y1="22" x2="12" y2="7"></line>
-                <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
-                <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
-            </svg>`;
+        // --- Konfigurasi Game ---
+        const TOTAL_BOXES = 12; // Jumlah total kotak hadiah
+        const VALID_BUTTON_ID = 'valid-redeem-button'; // ID unik untuk tombol yang benar
 
-        TARGET_IDS.forEach(id => {
-            const card = document.createElement('div');
-            card.className = 'card';
-            // Menggunakan struktur HTML baru yang lebih profesional
-            card.innerHTML = `
-                <div class="card-image-placeholder">${giftIconSVG}</div>
-                <div class="card-content">
-                    <h3>Voucher Diskon Spesial</h3>
-                    <p>Tukarkan poin Anda untuk mendapatkan voucher eksklusif ini.</p>
-                </div>
-                <div class="card-footer">
-                    <span class="reward-id">ID: ${id}</span>
-                </div>
-            `;
-            gridContainer.appendChild(card);
-        });
-
-        function placeRedeemButtonRandomly() {
-            const allCards = document.querySelectorAll('.grid > div');
-            if (allCards.length === 0) return;
-
-            const randomIndex = Math.floor(Math.random() * allCards.length);
-            const targetCard = allCards[randomIndex];
+        /**
+         * Fungsi untuk menampilkan notifikasi.
+         * @param {string} message - Pesan yang akan ditampilkan.
+         * @param {string} type - 'success' atau 'error'.
+         */
+        function showNotification(message, type = 'success') {
+            notification.textContent = message;
+            if (type === 'success') {
+                notification.className = 'fixed top-5 right-5 bg-green-500 text-white py-3 px-5 rounded-lg shadow-xl opacity-0 transform -translate-y-10';
+            } else {
+                notification.className = 'fixed top-5 right-5 bg-yellow-500 text-white py-3 px-5 rounded-lg shadow-xl opacity-0 transform -translate-y-10';
+            }
             
-            // Tombol "Redeem Now" ditambahkan ke dalam .card-footer
-            const buttonContainer = targetCard.querySelector('.card-footer');
-            if(buttonContainer) {
-                const redeemButton = document.createElement('button');
-                redeemButton.textContent = 'Redeem Now';
-                buttonContainer.appendChild(redeemButton);
+            notification.classList.remove('hidden');
+            notification.offsetWidth;
+            notification.classList.remove('opacity-0', '-translate-y-10');
+
+            setTimeout(() => {
+                notification.classList.add('opacity-0', '-translate-y-10');
+                setTimeout(() => notification.classList.add('hidden'), 500);
+            }, 3000);
+        }
+
+        /**
+         * Fungsi utama untuk membuat dan mereset papan permainan.
+         */
+        function setupGame() {
+            gameGrid.innerHTML = '';
+            statusMessage.textContent = 'Hanya satu kotak yang berisi hadiah. Semoga beruntung!';
+            statusMessage.classList.remove('text-green-400', 'text-yellow-400');
+
+            const winnerIndex = Math.floor(Math.random() * TOTAL_BOXES);
+
+            for (let i = 0; i < TOTAL_BOXES; i++) {
+                const card = document.createElement('div');
+                card.className = 'card bg-gray-800 rounded-lg p-4 flex flex-col items-center justify-center';
+                
+                const giftIcon = `<svg class="w-12 h-12 mb-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V6a2 2 0 10-2 2h2zm0 13l-4-4h8l-4 4z"></path></svg>`;
+                card.innerHTML = giftIcon;
+
+                const button = document.createElement('button');
+                // --- PERUBAHAN DI SINI ---
+                button.textContent = 'REDEEM NOW'; // Teks tombol diubah
+                button.className = 'w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-colors';
+                
+                if (i === winnerIndex) {
+                    button.id = VALID_BUTTON_ID;
+                } else {
+                    button.id = `fake-button-${i}-${Math.random()}`;
+                }
+
+                card.appendChild(button);
+                gameGrid.appendChild(card);
             }
         }
 
-        placeRedeemButtonRandomly();
-    </script>
+        // --- Event Listener Menggunakan Delegasi ---
+        gameGrid.addEventListener('click', function(event) {
+            const clickedButton = event.target.closest('button');
+            if (!clickedButton || clickedButton.disabled) {
+                return;
+            }
 
+            if (clickedButton.id === VALID_BUTTON_ID) {
+                statusMessage.textContent = 'Selamat! Anda menemukan hadiahnya!';
+                statusMessage.classList.add('text-green-400');
+                showNotification('Anda berhasil!', 'success');
+                
+                setTimeout(setupGame, 2000);
+
+            } else {
+                statusMessage.textContent = 'Kotak ini kosong. Coba lagi!';
+                statusMessage.classList.add('text-yellow-400');
+                
+                clickedButton.disabled = true;
+                clickedButton.textContent = 'Kosong';
+                clickedButton.classList.remove('bg-red-600', 'hover:bg-red-700');
+                clickedButton.classList.add('bg-gray-600', 'cursor-not-allowed');
+            }
+        });
+        
+        resetButton.addEventListener('click', setupGame);
+
+        window.onload = setupGame;
+
+    </script>
 </body>
 </html>
+
