@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Halaman Uji Coba Scanner (Statis)</title>
+    <title>Halaman Uji Coba Scanner (Grid 2x5)</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -15,13 +15,17 @@
             text-align: center;
             color: #333;
         }
+
+        /* PERUBAHAN UTAMA ADA DI SINI */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            /* Mengatur grid untuk memiliki 5 kolom dengan lebar yang sama */
+            grid-template-columns: repeat(5, 1fr); 
             gap: 20px;
             max-width: 1200px;
             margin: 20px auto;
         }
+
         .card {
             background-color: #ffffff;
             border: 1px solid #dddfe2;
@@ -72,16 +76,16 @@
 <body>
 
     <h1>Halaman Uji Coba untuk Smart Scanner v5.4</h1>
-    <p style="text-align: center;">Posisi tombol "Redeem Now" akan diacak setiap kali halaman di-refresh.</p>
+    <p style="text-align: center;">Layout: 2x5 Grid. Posisi tombol diacak setiap kali halaman di-refresh.</p>
 
     <div class="grid" id="reward-grid">
         </div>
 
     <script>
+        // Ada 9 ID di sini, yang akan mengisi grid 2x5 (baris pertama 5, baris kedua 4)
         const TARGET_IDS = ['18599', '18597', '18598', '19027', '18603', '18602', '18822', '18823', '19021'];
         const gridContainer = document.getElementById('reward-grid');
 
-        // 1. Buat semua kartu reward berdasarkan TARGET_IDS
         TARGET_IDS.forEach(id => {
             const card = document.createElement('div');
             card.className = 'card';
@@ -95,7 +99,6 @@
             gridContainer.appendChild(card);
         });
 
-        // 2. Fungsi untuk menempatkan tombol "Redeem Now" secara acak
         function placeRedeemButtonRandomly() {
             const allCards = document.querySelectorAll('.grid > div');
             if (allCards.length === 0) return;
@@ -109,9 +112,7 @@
             targetCard.appendChild(redeemButton);
         }
 
-        // 3. Panggil fungsi HANYA SATU KALI saat halaman dimuat
         placeRedeemButtonRandomly();
-        // BARIS setInterval TELAH DIHAPUS
 
     </script>
 
