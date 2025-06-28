@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halaman Uji Script Reward Scanner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Style tambahan untuk membuat halaman lebih hidup */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .card-highlight {
+            border: 2px solid #F59E0B; /* Amber-400 */
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-800 p-4 mb-8 rounded-lg shadow-md" role="alert">
+            <h2 class="font-bold text-xl mb-2">Petunjuk Pengujian</h2>
+            <p>Halaman ini dirancang untuk menguji <strong>Marlboro Reward Smart Scanner Enhanced v4.0</strong> Anda.</p>
+            <ol class="list-decimal list-inside mt-2 space-y-1">
+                <li>Pastikan skrip pengguna Anda aktif di Violentmonkey atau Tampermonkey.</li>
+                <li>Agar skrip berjalan di halaman ini, Anda mungkin perlu menambahkan baris berikut di bawah <code>// @match</code> pada skrip Anda: <br><code>// @include *</code> atau aturan yang lebih spesifik jika Anda menyimpannya sebagai file lokal.</li>
+                <li>Muat ulang halaman ini setelah skrip aktif.</li>
+                <li>Kotak log dari skrip seharusnya muncul di pojok kiri bawah.</li>
+                <li>Skrip akan mendeteksi kartu target (ditandai dengan warna kuning) dan mencoba mengklik tombol "Redeem". Notifikasi visual dan suara akan terpicu.</li>
+            </ol>
+        </div>
+
+        <h1 class="text-3xl md:text-4xl font-bold text-center mb-8">Katalog Reward</h1>
+
+        <!-- Grid untuk Kartu Reward -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+
+            <!-- KARTU TARGET 1 -->
+            <!-- Metode deteksi: Atribut `data-reward-id`. Class: `product-item` -->
+            <div class="product-item bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition-transform duration-300 card-highlight" data-reward-id="18599">
+                <img src="https://placehold.co/600x400/ef4444/ffffff?text=TARGET+1" alt="Reward Target 1" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-2 text-gray-900 dark:text-white">Voucher Eksklusif A</h3>
+                    <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">ID: 18599 (via data-reward-id)</p>
+                    <button class="w-full bg-red-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
+                        Redeem
+                    </button>
+                </div>
+            </div>
+
+            <!-- KARTU NON-TARGET 1 -->
+            <div class="product-item bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition-transform duration-300" data-id="12345">
+                <img src="https://placehold.co/600x400/3b82f6/ffffff?text=Bukan+Target" alt="Reward Biasa" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-2 text-gray-900 dark:text-white">Merchandise Topi</h3>
+                    <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">ID: 12345</p>
+                    <button class="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600">
+                        Claim
+                    </button>
+                </div>
+            </div>
+
+            <!-- KARTU TARGET 2 -->
+            <!-- Metode deteksi: Nama Class `reward-id-18597`. Class: `card-reward` -->
+            <div class="card-reward reward-id-18597 bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition-transform duration-300 card-highlight" id="item-987">
+                <img src="https://placehold.co/600x400/f97316/ffffff?text=TARGET+2" alt="Reward Target 2" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-2 text-gray-900 dark:text-white">Voucher Eksklusif B</h3>
+                    <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">ID: 18597 (via class name)</p>
+                     <a href="#" class="btn w-full block text-center bg-orange-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-orange-600">Get Now</a>
+                </div>
+            </div>
+
+            <!-- KARTU NON-TARGET 2 (Stok Habis) -->
+            <div class="reward-card-container bg-gray-300 dark:bg-gray-700 rounded-lg shadow-inner overflow-hidden" data-product-id="54321">
+                <img src="https://placehold.co/600x400/6b7280/ffffff?text=Habis" alt="Stok Habis" class="w-full h-48 object-cover opacity-50">
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-2 text-gray-600 dark:text-gray-400">Gantungan Kunci</h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">ID: 54321</p>
+                    <button class="w-full bg-gray-400 text-gray-600 font-bold py-2 px-4 rounded-lg cursor-not-allowed" disabled>
+                        Stok Habis
+                    </button>
+                </div>
+            </div>
+
+             <!-- KARTU TARGET 3 -->
+            <!-- Metode deteksi: Link di dalam kartu yang mengandung ID -->
+            <div class="reward-item bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition-transform duration-300 card-highlight">
+                <a href="/reward/19027/details" class="block">
+                    <img src="https://placehold.co/600x400/10b981/ffffff?text=TARGET+3" alt="Reward Target 3" class="w-full h-48 object-cover">
+                </a>
+                <div class="p-4">
+                     <a href="/reward/19027/details" class="block">
+                        <h3 class="font-bold text-lg mb-2 text-gray-900 dark:text-white">Voucher Eksklusif C</h3>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">ID: 19027 (via link href)</p>
+                    </a>
+                    <button onclick="alert('Redeem ID 19027');" class="w-full bg-emerald-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-emerald-600">
+                        Ambil Reward
+                    </button>
+                </div>
+            </div>
+
+             <!-- KARTU NON-TARGET 3 -->
+             <div class="product-card bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition-transform duration-300" data-id="99999">
+                <img src="https://placehold.co/600x400/8b5cf6/ffffff?text=Bukan+Target" alt="Reward Biasa" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-2 text-gray-900 dark:text-white">Korek Api Keren</h3>
+                    <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">ID: 99999</p>
+                    <button class="w-full bg-violet-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-violet-600">
+                        Redeem
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
+
